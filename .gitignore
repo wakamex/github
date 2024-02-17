@@ -44,7 +44,7 @@ htmlcov
 __pypackages__/
 
 # Environments
-.env
+.env*
 .venv
 env/
 venv/
@@ -73,3 +73,6 @@ dmypy.json
 
 # pycharm
 .idea
+
+# github repo files
+repos

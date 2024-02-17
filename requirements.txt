@@ -1,3 +1,5 @@
 github
 pandas
 pyarrow
+matplotlib
+jinja2
