@@ -1,0 +1,13 @@
+moby/moby
+openshift/origin
+docker-archive/classicswarm
+moby/swarmkit
+datastore/datastore
+openstack/openstack
+zhangxiaoyu-zidif/k8s-lose-weight
+Metaswitch/clearwater-docker
+istio/istio
+kubevirt/kubevirt
+mattn/goveralls
+kubernetes/kubernetes
+kubernetes-sigs/descheduler

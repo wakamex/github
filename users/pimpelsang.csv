@@ -1,0 +1,11 @@
+nlf/git-validate
+debezium/container-images
+debezium/debezium
+confluentinc/confluent-kafka-go
+tulios/kafkajs-snappy
+debezium/debezium.github.io
+canelmas/kafka-connect-field-and-time-partitioner
+tulios/kafkajs
+tulios/kafkajs
+elastic/elasticsearch-js
+webbio/strapi-plugin-scheduler

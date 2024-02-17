@@ -1,0 +1,6 @@
+open-power/ffs
+openbmc/openbmc
+openbmc/openbmc-tools
+openbmc/entity-manager
+open-power/hostboot
+Intel-BMC/mctpwplus

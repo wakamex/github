@@ -3,3 +3,5 @@ pandas
 pyarrow
 matplotlib
 jinja2
+db-dtypes
+google-cloud-bigquery

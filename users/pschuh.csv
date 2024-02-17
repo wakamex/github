@@ -1,0 +1,17 @@
+apple/swift
+tensorflow/swift-models
+apple/swift-lldb
+tensorflow/swift-bindings
+tensorflow/swift-apis
+fastai/fastai_dev
+apple/swift-clang
+apple/swift-corelibs-foundation
+apple/swift-corelibs-libdispatch
+llvm/llvm-project
+tensorflow/swift-models
+apple/swift-corelibs-xctest
+saeta/penguin
+google/jax
+google/flax
+google/trax
+jax-ml/australis

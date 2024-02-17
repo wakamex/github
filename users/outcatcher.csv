@@ -1,0 +1,7 @@
+opentelekomcloud-infra/otc-zuul-jobs
+rancher/rancher
+rancher/ui
+hashicorp/terraform-plugin-sdk
+gophercloud/gophercloud
+mc2soft/pq-types
+golangci/golangci-lint

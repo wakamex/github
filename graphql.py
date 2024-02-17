@@ -3,21 +3,76 @@ import json
 import os
 import random
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
-import pandas as pd
-from dotenv import load_dotenv
-from requests import Session
 from tqdm import tqdm
 
-load_dotenv(".env")
 
-session = Session()  # Create a session object
+def save_user_repos(session, username):
+    user_repos = get_user_repos(session, username)
+    # tqdm.write(f"Read {len(user_repos):>4} repos from {username}")
+    return username, user_repos
 
-# Configuration
-api_keys = [os.environ[k] for k in os.environ if k.startswith("GITHUB")]
-print(f"{len(api_keys)=}")
-session.keys = api_keys
+user_repos_query = """
+query($username: String!, $cursor: String, $history: Int) {
+  user(login: $username) {
+    repositories(first: $history, isFork: true, after: $cursor) {
+      edges {
+        node {
+          name
+          parent {
+            name
+            owner {
+              login
+            }
+            url
+          }
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+}
+"""
+
+def get_user_repos(session, username):
+    all_repos = []
+    has_next_page = True
+    cursor = None
+    page_num=0
+    while has_next_page is True:
+        page_num+=1
+        variables = {"username": username,"cursor": cursor}
+        repos = None
+        sleep_length = 2/1.25
+        exponential_backoff = 1.5
+        history = 100
+        history_divisor = 2
+        while repos is None:
+            try:
+                variables['history'] = history
+                response = session.post('https://api.github.com/graphql', json={'query': user_repos_query, 'variables': variables}, headers=headers(session))
+                data = response.json()
+                repos = data['data']['user']['repositories']['edges']
+                parent_repos = [repo['node']['parent'] for repo in repos if repo['node'].get('parent')]
+                parent_full_names = [f"{parent['owner']['login']}/{parent['name']}" for parent in parent_repos]
+                page_info = data['data']['user']['repositories']['pageInfo']
+                cursor = page_info['endCursor']
+                has_next_page = page_info['hasNextPage']
+                all_repos.extend(parent_full_names)
+                # tqdm.write(f"total repos: {len(set(all_repos))}")
+            except Exception as exc:
+                if "errors" in response.text and "NOT FOUND" in response.text.errors[0].type:
+                    tqdm.write(f"User {username} not found")
+                    return []
+                sleep_length *= exponential_backoff
+                history = max(history // history_divisor, 1)
+                tqdm.write(f"Error fetching repos of {username}: {exc}, waiting for {sleep_length} seconds and trying {history} records...")
+                tqdm.write("Error message: " + response.text)
+                time.sleep(sleep_length)
+    return all_repos
 
 rate_limit_query = """
 query {
@@ -57,14 +112,11 @@ query {
 """
 
 def parent_repo(session, owner, repo):
-    variables = {
-        "owner": owner,
-        "repo": repo
-    }
+    variables = {"owner": owner,"repo": repo}
     parent = None
     sleep_length = 2/1.25
     exponential_backoff = 1.25
-    while not parent:
+    while parent is None:
         try:
             response = session.post('https://api.github.com/graphql', json={'query': parent_repo_query, 'variables': variables}, headers=headers(session))
             data = response.json()
@@ -72,7 +124,7 @@ def parent_repo(session, owner, repo):
         except Exception as exc:
             sleep_length *= exponential_backoff
             tqdm.write(f"Error fetching parent of {owner}/{repo}: {exc}, waiting for {sleep_length} seconds and trying again...")
-            tqdm.write("Error message: " + response.text)
+            tqdm.write(f"Error message: {response.text}")
             time.sleep(sleep_length)
     return parent
 
@@ -87,14 +139,11 @@ query ($owner: String!, $repo: String!) {
 """
 
 def fetch_default_branch_name(session, owner, repo):
-    variables = {
-        "owner": owner,
-        "repo": repo
-    }
+    variables = {"owner": owner,"repo": repo}
     default_branch_name = None
     sleep_length = 2/1.25
     exponential_backoff = 1.25
-    while not default_branch_name:
+    while default_branch_name is None:
         try:
             response = session.post('https://api.github.com/graphql', json={'query': query_default_branch, 'variables': variables}, headers=headers(session))
             data = response.json()
@@ -102,7 +151,7 @@ def fetch_default_branch_name(session, owner, repo):
         except Exception as exc:
             sleep_length *= exponential_backoff
             tqdm.write(f"Error fetching default branch of {owner}/{repo}: {exc}, waiting for {sleep_length} seconds and trying again...")
-            tqdm.write("Error message: " + response.text)
+            tqdm.write(f"Error message: {response.text}")
             time.sleep(sleep_length)
     return default_branch_name
 
@@ -146,7 +195,7 @@ def fetch_commits(session, owner, repo, branch):
     cursor = None
     page_num=0
 
-    while has_next_page:
+    while has_next_page is True:
         page_num+=1
         variables = {"owner": owner,"repo": repo,"branch": branch,"cursor": cursor}
         commits = None
@@ -154,7 +203,7 @@ def fetch_commits(session, owner, repo, branch):
         exponential_backoff = 1.5
         history = 100
         history_divisor = 2
-        while not commits:
+        while commits is None:
             try:
                 variables['history'] = history
                 tqdm.write(f"{variables=}")
@@ -178,8 +227,7 @@ def fetch_commits(session, owner, repo, branch):
 def parse_repo(session, repo):
     owner, repo = repo.split('/')
     branch = fetch_default_branch_name(session, owner, repo)
-    commits = fetch_commits(session, owner, repo, branch)
-    return commits
+    return fetch_commits(session, owner, repo, branch)
 
 def save_repo(session, repo):
     filepath = f"repos/{repo.replace('/', '_')}.json"
@@ -201,14 +249,3 @@ headers_template = {
 def headers(session):
     random_key = random.choice(session.keys)
     return {key: value.format(key=random_key) for key, value in headers_template.items()}
-
-# %%
-# parse lots of repos
-os.makedirs("repos", exist_ok=True)
-relevant_repos = pd.read_csv("relevant_repos.txt",header=None)[0].values
-with ThreadPoolExecutor(max_workers=len(api_keys)) as executor:
-    futures = [executor.submit(save_repo, session, repo) for repo in relevant_repos]
-    for future in tqdm(as_completed(futures), total=len(futures)):
-        result = future.result()
-
-# %%

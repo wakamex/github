@@ -1,0 +1,14 @@
+apache/airflow
+ewels/rich-click
+prometherion/jotb22-k8s-multitenancy
+tiangolo/fastapi
+samamorgan/action-autotag-python
+dateutil/dateutil
+mtth/hdfs
+ansible/ansible
+mitogen-hq/mitogen
+hashicorp/vault-helm
+datahub-project/datahub
+cloudnative-pg/charts
+kube-logging/helm-charts
+acryldata/datahub-helm

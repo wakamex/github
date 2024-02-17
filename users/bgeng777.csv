@@ -1,0 +1,15 @@
+flink-extended/dl-on-flink
+apache/flink
+flink-extended/ai-flow
+GoogleCloudPlatform/flink-on-k8s-operator
+wangyang0918/flink-native-k8s-operator
+apache/flink-kubernetes-operator
+alibaba/pemja
+risingwavelabs/risingwave
+ververica/flink-cdc-connectors
+apache/incubator-paimon
+alibaba/feathub
+duckdb/duckdb
+facebookincubator/velox
+RealtimeCompute/ververica-cep-demo
+apache/incubator-wayang

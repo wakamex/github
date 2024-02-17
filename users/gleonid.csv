@@ -1,0 +1,4 @@
+pingcap/parser
+go-mysql-org/go-mysql
+golang/sync
+jonahgeorge/opencensus-go-exporter-graphite

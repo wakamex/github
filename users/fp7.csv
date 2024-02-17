@@ -1,0 +1,14 @@
+srs/gradle-node-plugin
+clojure-emacs/orchard
+clojure-emacs/cider-nrepl
+nrepl/nrepl
+matterhorn-chat/matterhorn
+matterhorn-chat/mattermost-api-qc
+matterhorn-chat/mattermost-api
+noprompt/meander
+fusion-jena/JaroWinklerSimilarity
+JetBrains/intellij-community
+immutables/immutables
+Homyakin/iuliia-java
+JetBrains/android
+spring-gradle-plugins/dependency-management-plugin

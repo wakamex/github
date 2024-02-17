@@ -1,0 +1,7 @@
+torch/torch7
+NVIDIA/flownet2-pytorch
+facebookresearch/detectron2
+pytorch/pytorch
+cocodataset/cocodataset.github.io
+facebookresearch/fairseq
+facebookresearch/ic_gan

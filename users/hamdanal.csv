@@ -1,0 +1,11 @@
+python/typeshed
+python/mypy
+JelleZijlstra/stubdefaulter
+python/cpython
+Textualize/rich
+astral-sh/ruff-pre-commit
+pypa/pip
+sbdchd/django-types
+typeshed-internal/stub_uploader
+mwaskom/seaborn
+pandas-dev/pandas-stubs

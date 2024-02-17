@@ -1,0 +1,5 @@
+pytorch/pytorch
+pytorch/torchdynamo
+pytorch/xla
+openai/triton
+jansel/pytorch-jit-paritybench

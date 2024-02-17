@@ -76,3 +76,6 @@ dmypy.json
 
 # github repo files
 repos
+
+# big query
+bigquerykey.json

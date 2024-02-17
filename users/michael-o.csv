@@ -1,0 +1,15 @@
+javaee/jersey
+python/cpython
+apache/httpd
+freebsd/freebsd-src
+pythongssapi/requests-gssapi
+apache/tomcat-native
+apache/tomcat
+javaee/metro-jaxws-commons
+freebsd/poudriere
+freebsd/pkg
+brandond/requests-negotiate-sspi
+mirror/sed
+curl/curl
+freebsd/freebsd-ports
+openssl/openssl

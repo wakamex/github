@@ -1,0 +1,11 @@
+pallets/flask
+bbc/nmos-common
+koodaamo/pybonjour
+bbc/nmos-mdns-bridge
+bbc/nmos-reverse-proxy
+bbc/nmos-query
+bbc/nmos-node
+flycheck/flycheck-google-cpplint
+barneygale/httpio
+python/cpython
+python/typeshed

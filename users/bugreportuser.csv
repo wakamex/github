@@ -1,0 +1,9 @@
+php/php-src
+sebastianbergmann/php-code-coverage
+phar-io/phive
+phan/phan
+composer/composer
+dochne/google-authenticator
+JetBrains/phpstorm-stubs
+vimeo/psalm
+google/closure-compiler
